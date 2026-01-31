@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         info = @Info(
                 title = "PetShow API",
-                version = "v1",
+                version = "1.0.0",
                 description = "API para cadastro e consulta de animais do PetShow"
                // contact = @Contact(name = "Time API", email = "api@petshow.com.br"),
                // license = @License(name = "MIT", url = "https://opensource.org/licenses/MIT")

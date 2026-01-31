@@ -1,0 +1,17 @@
+springdoc:
+  api-docs:
+    path: /v1/api-docs
+
+  swagger-ui:
+    path: /docs
+    operationsSorter: alpha        # ordena alfabeticamente
+    tagsSorter: alpha
+    docExpansion: none             # tudo recolhido por padrão
+    tryItOutEnabled: true
+    filter: true                   # caixa de filtro no topo
+    deepLinking: true
+    displayRequestDuration: true
+    persistAuthorization: true     # mantém o token entre reloads
+
+server:
+# port: 8080

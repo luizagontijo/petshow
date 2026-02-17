@@ -3,7 +3,7 @@ package com.br.petshow.api.v1.controller;
 import com.br.petshow.api.v1.dto.AnimalDTO;
 import com.br.petshow.api.v1.dto.CadastroRequestDTO;
 import com.br.petshow.api.v1.dto.ErrorResponseDTO;
-import com.br.petshow.api.v1.enums.Sexo;
+import com.br.petshow.api.v1.enums.SexoEnum;
 import com.br.petshow.api.v1.samples.AnimalSamples;
 import com.br.petshow.config.swagger.SwaggerExampleConstants;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 /**
- * GET  /api/v1/bicho            -> retorna animal genérico (mock)
- * POST /api/v1/adicionarBicho   -> cria animal com nome e tipo obrigatórios; demais campos opcionais
+ * GET  /v1/bichos   -> retorna animal genérico (mock)
+ * POST /v1/bichos   -> cria animal com nome e tipo obrigatórios; demais campos opcionais
  */
 @RestController
-@RequestMapping(path = "/api/v1", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(
         name = "Bichos",
         description = "Operações de consulta e cadastro de animais",
@@ -33,7 +33,7 @@ import java.time.LocalDateTime;
 
 public class BichoController {
 
-    @GetMapping("/bicho")
+    @GetMapping("/bichos")
     @Operation(
             summary = "Busca um bicho de exemplo",
             description = "Retorna um animal genérico para fins de teste.",
@@ -75,7 +75,7 @@ public class BichoController {
         return AnimalSamples.cachorroGenerico();
     }
 
-    @PostMapping(value = "/adicionarBicho", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/bichos", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             summary = "Cadastra um novo bicho",
             description = "Cria um animal com nome e tipo obrigatórios; demais campos são opcionais. " +
@@ -114,7 +114,7 @@ public class BichoController {
     })
     public ResponseEntity<AnimalDTO> adicionarBicho(@Valid @RequestBody CadastroRequestDTO req) {
         // Defaults quando campos opcionais vierem ausentes
-        var sexo = req.getSexo() != null ? req.getSexo() : Sexo.NAO_INFORMADO;
+        var sexo = req.getSexo() != null ? req.getSexo() : SexoEnum.NAO_INFORMADO;
 
         // Monta o AnimalDto de resposta
         AnimalDTO criado = new AnimalDTO(

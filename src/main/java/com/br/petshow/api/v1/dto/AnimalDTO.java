@@ -1,6 +1,6 @@
 package com.br.petshow.api.v1.dto;
 
-import com.br.petshow.api.v1.enums.Sexo;
+import com.br.petshow.api.v1.enums.SexoEnum;
 import com.fasterxml.jackson.annotation.JsonInclude; //configurar como os campos de um objeto serão serializados em JSON
 import com.fasterxml.jackson.annotation.JsonFormat; // opcional
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,8 +31,8 @@ public class AnimalDTO {
     @Schema(description = "Cor do animal", example = "Caramelo")
     private String cor;
 
-    @Schema(description = "Sexo do animal", example = "MACHO", implementation = Sexo.class)
-    private Sexo sexo;
+    @Schema(description = "Sexo do animal", example = "MACHO", implementation = SexoEnum.class)
+    private SexoEnum sexo;
 
     @Schema(description = "Idade em anos (derivada de dataNascimento)", example = "2", accessMode = Schema.AccessMode.READ_ONLY)
     private Integer idade;
@@ -54,7 +54,7 @@ public class AnimalDTO {
     //permite criar um objeto vazio e preencher seus campos posteriormente
 
     //construtor com argumentos, facilita a criação de objetos completos
-    public AnimalDTO(String tipo, String nome, String raca, String cor, Sexo sexo,
+    public AnimalDTO(String tipo, String nome, String raca, String cor, SexoEnum sexo,
                      LocalDate dataNascimento, String dono, LocalDateTime dataCadastro) {
         this.tipo = tipo;
         this.nome = nome;
@@ -89,8 +89,8 @@ public class AnimalDTO {
     public String getCor() { return cor; }
     public void setCor(String cor) { this.cor = cor; }
 
-    public Sexo getSexo() { return sexo; }
-    public void setSexo(Sexo sexo) { this.sexo = sexo; }
+    public SexoEnum getSexo() { return sexo; }
+    public void setSexo(SexoEnum sexo) { this.sexo = sexo; }
 
     public Integer getIdade() { return idade; }
     public void setIdade(Integer idade) { this.idade = idade; }

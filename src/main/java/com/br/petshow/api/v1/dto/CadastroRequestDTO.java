@@ -1,6 +1,6 @@
 package com.br.petshow.api.v1.dto;
 
-import com.br.petshow.api.v1.enums.Sexo;
+import com.br.petshow.api.v1.enums.SexoEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonFormat; // opcional
 import jakarta.validation.constraints.NotBlank;
@@ -37,8 +37,8 @@ public class CadastroRequestDTO {
     @Schema(description = "Cor do animal", example = "Caramelo", maxLength = 30)
     private String cor;           // opcional
 
-    @Schema(description = "Sexo do animal", example = "MACHO", implementation = Sexo.class)
-    private Sexo sexo;            // opcional (MACHO, FEMEA, NAO_INFORMADO)
+    @Schema(description = "Sexo do animal", example = "MACHO", implementation = SexoEnum.class)
+    private SexoEnum sexo;            // opcional (MACHO, FEMEA, NAO_INFORMADO)
 
     @PastOrPresent
     @Schema(description = "Data de nascimento (não pode ser no futuro)", type = "string", format = "date", example = "2025-11-01")
@@ -53,7 +53,7 @@ public class CadastroRequestDTO {
     }
 
     public CadastroRequestDTO(String nome, String tipo, String raca, String cor,
-                              Sexo sexo, LocalDate dataNascimento, String dono) {
+                              SexoEnum sexo, LocalDate dataNascimento, String dono) {
         this.nome = nome;
         this.tipo = tipo;
         this.raca = raca;
@@ -97,11 +97,11 @@ public class CadastroRequestDTO {
         this.cor = cor;
     }
 
-    public Sexo getSexo() {
+    public SexoEnum getSexo() {
         return sexo;
     }
 
-    public void setSexo(Sexo sexo) {
+    public void setSexo(SexoEnum sexo) {
         this.sexo = sexo;
     }
 

@@ -1,7 +1,7 @@
 package com.br.petshow.api.v1.samples;
 
 import com.br.petshow.api.v1.dto.AnimalDTO;
-import com.br.petshow.api.v1.enums.Sexo;
+import com.br.petshow.api.v1.enums.SexoEnum;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ public final class AnimalSamples {
                 "Bila Bilu",
                 "Poodle",
                 "Branco",
-                Sexo.FEMEA,
+                SexoEnum.FEMEA,
                 LocalDate.of(2015, 3, 28),
                 "Luiza",
                 LocalDateTime.now()    // data do cadastro é a data atual

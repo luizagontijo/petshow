@@ -1,6 +1,8 @@
 package com.br.petshow.api.v1.dto;
 
-import com.br.petshow.api.v1.enums.Sexo;
+import com.br.petshow.api.v1.enums.SexoEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
+import com.fasterxml.jackson.annotation.JsonFormat; // opcional
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.PastOrPresent;
@@ -13,35 +15,45 @@ import java.time.LocalDate;
  * - tipo: obrigatório (ex.: "Cachorro", "Gato", "Pássaro", etc.)
  * - demais campos: opcionais
  */
+
+@Schema(description = "Dados para cadastro de um bicho")
 public class CadastroRequestDTO {
 
     @NotBlank
     @Size(max = 50)
+    @Schema(description = "Nome do animal", example = "Scooby", requiredMode = Schema.RequiredMode.REQUIRED, maxLength = 50)
     private String nome;
 
     @NotBlank
     @Size(max = 30)
+    @Schema(description = "Tipo do animal (ex.: Cachorro, Gato, Pássaro)", example = "CACHORRO", requiredMode = Schema.RequiredMode.REQUIRED, maxLength = 30)
     private String tipo;          // obrigatório: tipo do animal
 
     @Size(max = 50)
+    @Schema(description = "Raça do animal", example = "Vira-lata", maxLength = 50)
     private String raca;          // opcional
 
     @Size(max = 30)
+    @Schema(description = "Cor do animal", example = "Caramelo", maxLength = 30)
     private String cor;           // opcional
 
-    private Sexo sexo;            // opcional (MACHO, FEMEA, NAO_INFORMADO)
+    @Schema(description = "Sexo do animal", example = "MACHO", implementation = SexoEnum.class)
+    private SexoEnum sexo;            // opcional (MACHO, FEMEA, NAO_INFORMADO)
 
     @PastOrPresent
+    @Schema(description = "Data de nascimento (não pode ser no futuro)", type = "string", format = "date", example = "2025-11-01")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataNascimento; // opcional
 
     @Size(max = 60)
+    @Schema(description = "Nome do dono", example = "Luiza", maxLength = 60)
     private String dono;          // opcional
 
     public CadastroRequestDTO() {
     }
 
     public CadastroRequestDTO(String nome, String tipo, String raca, String cor,
-                              Sexo sexo, LocalDate dataNascimento, String dono) {
+                              SexoEnum sexo, LocalDate dataNascimento, String dono) {
         this.nome = nome;
         this.tipo = tipo;
         this.raca = raca;
@@ -85,11 +97,11 @@ public class CadastroRequestDTO {
         this.cor = cor;
     }
 
-    public Sexo getSexo() {
+    public SexoEnum getSexo() {
         return sexo;
     }
 
-    public void setSexo(Sexo sexo) {
+    public void setSexo(SexoEnum sexo) {
         this.sexo = sexo;
     }
 

@@ -1,4 +1,4 @@
-package com.br.petshow.api.v1.controller;
+package com.br.petshow.api.v1.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

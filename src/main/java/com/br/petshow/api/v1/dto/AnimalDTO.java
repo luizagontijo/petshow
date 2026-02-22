@@ -1,8 +1,11 @@
 package com.br.petshow.api.v1.dto;
 
-import com.br.petshow.api.v1.enums.Sexo;
-//configurar como os campos de um objeto serão serializados em JSON
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.br.petshow.api.v1.enums.SexoEnum;
+import com.fasterxml.jackson.annotation.JsonInclude; //configurar como os campos de um objeto serão serializados em JSON
+import com.fasterxml.jackson.annotation.JsonFormat; // opcional
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,19 +16,42 @@ import java.time.Period;
  * - idade é derivada de dataNascimento, se presente.
  * - sexo é um enum (MACHO, FEMEA, NAO_INFORMADO).
  */
+@Schema(description = "Dados de um animal retornado pela API")
 @JsonInclude(JsonInclude.Include.NON_NULL) //so mostra o que não é nulo
 public class AnimalDTO {
 
-    private String tipo;             // cachorro, gato, etc
-    private String nome;
-    private String raca;
-    private String cor;
-    private Sexo sexo;            // enum
+    @Schema(description = "Tipo do animal", example = "Cachorro")
+    private String tipo;
 
-    private Integer idade;           // derivada de dataNascimento
+    @Schema(description = "Nome do animal", example = "Bidu")
+    private String nome;
+
+    @Schema(description = "Raça do animal", example = "Vira-lata")
+    private String raca;
+
+    @Schema(description = "Cor do animal", example = "Caramelo")
+    private String cor;
+
+    @Schema(
+            description = "Sexo do animal",
+            example = "MACHO",
+            implementation = SexoEnum.class,
+            allowableValues = {"MACHO", "FEMEA", "NAO_INFORMADO"})
+    private SexoEnum sexo;
+
+    @Schema(description = "Idade em anos (derivada de dataNascimento)", example = "2", accessMode = Schema.AccessMode.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Integer idade;
+
+    @Schema(description = "Data de nascimento (YYYY-MM-DD)", type = "string", format = "date", example = "2024-01-10")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataNascimento;
 
+    @Schema(description = "Nome do dono", example = "Mônica")
     private String dono;
+
+    @Schema(description = "Data/hora do cadastro (YYYY-MM-DDTHH:mm:ss)", type = "string", format = "date-time", example = "2026-01-25T10:15:30")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dataCadastro;
 
     public AnimalDTO() {}
@@ -33,7 +59,7 @@ public class AnimalDTO {
     //permite criar um objeto vazio e preencher seus campos posteriormente
 
     //construtor com argumentos, facilita a criação de objetos completos
-    public AnimalDTO(String tipo, String nome, String raca, String cor, Sexo sexo,
+    public AnimalDTO(String tipo, String nome, String raca, String cor, SexoEnum sexo,
                      LocalDate dataNascimento, String dono, LocalDateTime dataCadastro) {
         this.tipo = tipo;
         this.nome = nome;
@@ -48,7 +74,10 @@ public class AnimalDTO {
 
     private Integer calcularIdade(LocalDate nascimento) {
         if (nascimento == null) return null;
-        return Period.between(nascimento, LocalDate.now()).getYears();
+        int anos = Period.between(nascimento, LocalDate.now()).getYears();
+        // Evita idade negativa se a data for futura (dados inválidos)
+        return Math.max(anos, 0);
+
     }
 
     // Getters e Setters
@@ -68,11 +97,11 @@ public class AnimalDTO {
     public String getCor() { return cor; }
     public void setCor(String cor) { this.cor = cor; }
 
-    public Sexo getSexo() { return sexo; }
-    public void setSexo(Sexo sexo) { this.sexo = sexo; }
+    public SexoEnum getSexo() { return sexo; }
+    public void setSexo(SexoEnum sexo) { this.sexo = sexo; }
 
     public Integer getIdade() { return idade; }
-    public void setIdade(Integer idade) { this.idade = idade; }
+    // Setter removido para manter somente leitura no contrato público;
 
     public LocalDate getDataNascimento() { return dataNascimento; }
     public void setDataNascimento(LocalDate dataNascimento) {

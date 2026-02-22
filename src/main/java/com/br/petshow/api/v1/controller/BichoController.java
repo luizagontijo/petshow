@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.*;
 import io.swagger.v3.oas.annotations.extensions.*;
 import jakarta.validation.Valid;
 import org.springframework.http.*;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
  */
 @RestController
 @RequestMapping(path = "/v1", produces = MediaType.APPLICATION_JSON_VALUE)
+@Validated // ativa validação também em @PathVariable, @RequestParam, @RequestHeader, mas ainda nao uso
 @Tag(
         name = "Bichos",
         description = "Operações de consulta e cadastro de animais",
@@ -37,13 +39,18 @@ public class BichoController {
     @Operation(
             summary = "Busca um bicho de exemplo",
             description = "Retorna um animal genérico para fins de teste.",
-            operationId = "getBicho",
+            operationId = "consultarBicho",
             tags = {"Bichos"}
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Animal retornado com sucesso",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = AnimalDTO.class),
-                            examples = @ExampleObject(name = "cachorro", value = """
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = AnimalDTO.class),
+                            examples = @ExampleObject(
+                                    name = "cachorro",
+                                    summary = "Exemplo de cachorro",
+                                    value = """
                                     {
                                       "tipo": "Cachorro",
                                       "nome": "Bila Bilu2",
@@ -84,9 +91,31 @@ public class BichoController {
             tags = {"Bichos"}
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Animal criado",
-                    content = @Content(schema = @Schema(implementation = AnimalDTO.class)))
-            ,
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Animal criado",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = AnimalDTO.class),
+                            examples = @ExampleObject(
+                                    name = "criado",
+                                    summary = "Exemplo de resposta com animal criado",
+                                    value = """
+                                    {
+                                      "tipo": "Papagaio",
+                                      "nome": "Helder",
+                                      "raca": "Sem Raça Definida",
+                                      "cor": "Verde",
+                                      "sexo": "NAO_INFORMADO",
+                                      "idade": 52,
+                                      "dataNascimento": "2074-08-10",
+                                      "dono": "Renata",
+                                      "dataCadastro": "2026-02-21T09:30:00"
+                                    }
+                                    """
+                            )
+                    )
+            ),
             @ApiResponse(
                     responseCode = "400",
                     description = SwaggerExampleConstants.DESC_400,
@@ -112,7 +141,46 @@ public class BichoController {
                     )
             )
     })
-    public ResponseEntity<AnimalDTO> adicionarBicho(@Valid @RequestBody CadastroRequestDTO req) {
+    public ResponseEntity<AnimalDTO> adicionarBicho(
+            @Valid
+            //exemplos de request
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    required = true,
+                    description = "Dados mínimos para cadastro do animal",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CadastroRequestDTO.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "minimo",
+                                            summary = "Exemplo mínimo válido",
+                                            value = """
+                                            {
+                                              "tipo": "Gato",
+                                              "nome": "Morgana"
+                                            }
+                                            """
+                                    ),
+                                    @ExampleObject(
+                                            name = "completo",
+                                            summary = "Exemplo completo",
+                                            value = """
+                                            {
+                                              "tipo": "Cachorro",
+                                              "nome": "Rex",
+                                              "raca": "Labrador",
+                                              "cor": "Caramelo",
+                                              "sexo": "MACHO",
+                                              "dataNascimento": "2020-05-20",
+                                              "dono": "Luiza"
+                                            }
+                                            """
+                                    )
+                            }
+                    )
+            )
+
+            @RequestBody CadastroRequestDTO req) {
         // Defaults quando campos opcionais vierem ausentes
         var sexo = req.getSexo() != null ? req.getSexo() : SexoEnum.NAO_INFORMADO;
 

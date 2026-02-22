@@ -23,7 +23,7 @@ public final class SwaggerExampleConstants {
           "error": "Dados inválidos",
           "message": "Verifique os campos obrigatórios e os formatos",
           "fields": { "nome": "não deve estar em branco" },
-          "path": "/api/v1/adicionarBicho"
+          "path": "v1/bichos"
         }
         """;
 }

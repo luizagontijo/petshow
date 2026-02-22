@@ -4,14 +4,14 @@ springdoc:
 
   swagger-ui:
     path: /docs
-    operationsSorter: alpha        # ordena alfabeticamente
-    tagsSorter: alpha
-    docExpansion: none             # tudo recolhido por padrão
-    tryItOutEnabled: true
+    operations-sorter: alpha        # ordena alfabeticamente
+    tags-sorter: alpha
+    doc-expansion: none             # tudo recolhido por padrão
+    try-it-out-enabled: true
     filter: true                   # caixa de filtro no topo
-    deepLinking: true
-    displayRequestDuration: true
-    persistAuthorization: true     # mantém o token entre reloads
+    deep-linking: true
+    display-request-duration: true
+    persist-authorization: true     # mantém o token entre reloads
 
 server:
 # port: 8080

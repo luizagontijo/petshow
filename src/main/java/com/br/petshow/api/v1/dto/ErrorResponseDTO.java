@@ -22,7 +22,7 @@ public class ErrorResponseDTO {
     @Schema(description = "Mapa de erros por campo")
     private Map<String, String> fields;
 
-    @Schema(description = "Caminho da requisição", example = "/api/v1/adicionarBicho")
+    @Schema(description = "Caminho da requisição", example = "/v1/bichos")
     private String path;
 
     public ErrorResponseDTO() {}

@@ -3,6 +3,7 @@ package com.br.petshow.api.v1.dto;
 import com.br.petshow.api.v1.enums.SexoEnum;
 import com.fasterxml.jackson.annotation.JsonInclude; //configurar como os campos de um objeto serão serializados em JSON
 import com.fasterxml.jackson.annotation.JsonFormat; // opcional
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
@@ -31,12 +32,16 @@ public class AnimalDTO {
     @Schema(description = "Cor do animal", example = "Caramelo")
     private String cor;
 
-    @Schema(description = "Sexo do animal", example = "MACHO", implementation = SexoEnum.class)
+    @Schema(
+            description = "Sexo do animal",
+            example = "MACHO",
+            implementation = SexoEnum.class,
+            allowableValues = {"MACHO", "FEMEA", "NAO_INFORMADO"})
     private SexoEnum sexo;
 
     @Schema(description = "Idade em anos (derivada de dataNascimento)", example = "2", accessMode = Schema.AccessMode.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer idade;
-
 
     @Schema(description = "Data de nascimento (YYYY-MM-DD)", type = "string", format = "date", example = "2024-01-10")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -69,7 +74,10 @@ public class AnimalDTO {
 
     private Integer calcularIdade(LocalDate nascimento) {
         if (nascimento == null) return null;
-        return Period.between(nascimento, LocalDate.now()).getYears();
+        int anos = Period.between(nascimento, LocalDate.now()).getYears();
+        // Evita idade negativa se a data for futura (dados inválidos)
+        return Math.max(anos, 0);
+
     }
 
     // Getters e Setters
@@ -93,7 +101,7 @@ public class AnimalDTO {
     public void setSexo(SexoEnum sexo) { this.sexo = sexo; }
 
     public Integer getIdade() { return idade; }
-    public void setIdade(Integer idade) { this.idade = idade; }
+    // Setter removido para manter somente leitura no contrato público;
 
     public LocalDate getDataNascimento() { return dataNascimento; }
     public void setDataNascimento(LocalDate dataNascimento) {
